@@ -68,11 +68,14 @@ export default {
   },
   data() {
     return {
-      value: [],
+      value: '',
       loading: false,
       listData: [],
       originalData: [] // 存储原始数据
     }
+  },
+  created() {
+    // todo 编辑时请求默认值
   },
   methods: {
     remoteMethod(query) {
