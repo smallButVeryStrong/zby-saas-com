@@ -57,12 +57,28 @@ export default {
     },
     size: {
       type: String
+    },
+    initVal: {
+      type: [String, Number]
+    },
+    isShow: {
+      type: Boolean,
+      default: false
+    },
+    initValText: {
+      type: String
     }
   },
   watch: {
     value(val) {
       if (val) {
         this.$emit('callback', val)
+      }
+    },
+    isShow(val) {
+      if (val) {
+        this.value = this.initVal
+        this.remoteMethod(this.initValText)
       }
     }
   },
@@ -75,7 +91,10 @@ export default {
     }
   },
   created() {
-    // todo 编辑时请求默认值
+    if (this.initVal) {
+      this.value = this.initVal
+    }
+    this.remoteMethod(this.initValText)
   },
   methods: {
     remoteMethod(query) {
@@ -84,7 +103,11 @@ export default {
        * 理论上来说组件组件应该直接接受数据即可  但是这里还是想尽量简化引用组件的成本
        * 并且有效的利用系统封装好的axios
        */
-      this.getDataF(query).then(res => {
+      const params = {
+        name: query ? query : '',
+        status: 1
+      }
+      this.getDataF(params).then(res => {
         // 实际上这里需要依据maaping值将接口返回的数据处理成el-options能够执行的数据
         const len = this.dataLevel.length;
         if (len) {
